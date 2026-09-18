@@ -1,0 +1,23 @@
+[Unit]
+Description=ATLAS Quant Web
+After=network-online.target paper-trading-api.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=liplin221
+Group=liplin221
+WorkingDirectory=/home/liplin221/paper-trading
+Environment=NODE_ENV=production
+Environment=HOST=127.0.0.1
+Environment=PORT=3000
+Environment=WRANGLER_LOG_PATH=.wrangler/wrangler.log
+ExecStart=/usr/bin/npm run start -- --hostname 127.0.0.1
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=20
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

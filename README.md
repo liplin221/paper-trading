@@ -1,100 +1,33 @@
-# vinext-starter
+# ATLAS Quant Lab
 
-A clean full-stack starter running on
-[vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
-Drizzle support.
+ATLAS 是一个美股与港股的量化研究和模拟组合系统。量化计算在本地电脑运行，服务器接收结果、持久化、向前端提供数据，并负责微信机器人通知与回调。
 
-## Prerequisites
+## 架构
 
-- Node.js `>=22.13.0`
+1. 本地量化程序生成符合 `backend/sample_quant_result.json` 的 JSON。
+2. `tools/push_quant_result.py` 通过带 Bearer Token 的 HTTPS 请求上传结果。
+3. FastAPI 校验数据并以事务方式写入 SQLite。
+4. 前端读取 `/api/v1/dashboard/latest`。
+5. 配置企业微信机器人 Webhook 后，每次新结果会自动推送摘要。
 
-## Quick Start
+## API
+
+- `GET /api/v1/health`：健康检查。
+- `POST /api/v1/quant/runs`：上传量化结果，需要 Bearer Token。
+- `GET /api/v1/dashboard/latest`：读取最新展示数据。
+- `GET /api/v1/quant/runs`：读取历史运行摘要。
+- `GET /api/v1/quant/runs/{run_id}`：读取指定运行。
+- `GET|POST /api/v1/wechat/callback`：机器人验证与回调。
+- `GET /api/docs`：OpenAPI 文档。
+
+上传接口支持 `X-Idempotency-Key`，重复上传相同结果不会重复入库；同一幂等键携带不同内容会返回 409。
+
+## 本地推送示例
 
 ```bash
-npm install
-npm run dev
-npm run build
+export ATLAS_API_URL="https://your-domain.example"
+export ATLAS_API_TOKEN="从服务器安全配置中读取"
+python3 tools/push_quant_result.py backend/sample_quant_result.json
 ```
 
-This starter does not use `wrangler.jsonc`.
-
-## Included Shape
-
-- edit site code under `app/`
-- `.openai/hosting.json` declares optional Sites D1 and R2 bindings
-- `vite.config.ts` simulates declared bindings for local development
-- `db/schema.ts` starts intentionally empty
-- `examples/d1/` contains an optional D1 example surface
-- `drizzle.config.ts` supports local migration generation when needed
-
-## Workspace Auth Headers
-
-Signed-in visitors receive both `oai-authenticated-user-id` and `oai-authenticated-user-email`. Private Sites require every visitor to sign in; public Sites may also have anonymous visitors, for whom neither header is present.
-
-The user ID is stable for the same user on the same Site and different across Sites. Email and name are intended for display or contact purposes.
-
-SIWC-authenticated workspace sites may also receive
-`oai-authenticated-user-full-name` when the user's SIWC profile has a non-empty
-`name` claim. The full-name value is percent-encoded UTF-8 and is accompanied by
-`oai-authenticated-user-full-name-encoding: percent-encoded-utf-8`.
-
-Treat the full name as optional and fall back to email when it is absent:
-
-```tsx
-import { headers } from "next/headers";
-
-export default async function Home() {
-  const requestHeaders = await headers();
-  const userId = requestHeaders.get("oai-authenticated-user-id");
-  const email = requestHeaders.get("oai-authenticated-user-email");
-  const encodedFullName = requestHeaders.get("oai-authenticated-user-full-name");
-  const fullName =
-    encodedFullName &&
-    requestHeaders.get("oai-authenticated-user-full-name-encoding") ===
-      "percent-encoded-utf-8"
-      ? decodeURIComponent(encodedFullName)
-      : null;
-
-  const displayName = fullName ?? email;
-  // ...
-}
-```
-
-## Optional Dispatch-Owned ChatGPT Sign-In
-
-Import the ready-to-use helpers from `app/chatgpt-auth.ts` when the site needs
-optional or required ChatGPT sign-in:
-
-- Use `getChatGPTUser()` for optional signed-in UI.
-- Use `requireChatGPTUser(returnTo)` for server-rendered pages that should send
-  anonymous visitors through Sign in with ChatGPT.
-- Use `chatGPTSignInPath(returnTo)` and `chatGPTSignOutPath(returnTo)` for
-  browser links or actions.
-- Pass a same-origin relative `returnTo` path for the destination after sign-in
-  or sign-out. The helper validates and safely encodes it.
-- Mark protected pages with `export const dynamic = "force-dynamic"` because
-  they depend on per-request identity headers.
-
-Dispatch owns `/signin-with-chatgpt`, `/signout-with-chatgpt`, `/callback`, the
-OAuth cookies, and identity header injection. Do not implement app routes for
-those reserved paths. Routes that do not import and call the helper remain
-anonymous-compatible.
-
-SIWC establishes identity only; it does not prove workspace membership. Use the
-Sites hosting platform's access policy controls for workspace-wide restrictions,
-or enforce explicit server-side membership or allowlist checks.
-
-Use SIWC for account pages, user-specific dashboards, saved records, and write
-actions tied to the current ChatGPT user. Leave public content anonymous.
-
-## Useful Commands
-
-- `npm run dev`: start local development
-- `npm run build`: verify the vinext build output
-- `npm test`: build the starter and verify its rendered loading skeleton
-- `npm run db:generate`: generate Drizzle migrations after schema changes
-
-## Learn More
-
-- [vinext Documentation](https://github.com/cloudflare/vinext)
-- [Drizzle D1 Guide](https://orm.drizzle.team/docs/get-started/d1-new)
+生产环境密钥只保存在服务器的 `~/.config/paper-trading/backend.env`，不会提交到 Git。

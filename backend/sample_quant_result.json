@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "run_id": "sample-2026-09-18-close",
+  "generated_at": "2026-09-18T16:10:00+08:00",
+  "strategy_name": "US-HK Multi-Factor",
+  "risk_profile": "balanced",
+  "portfolio": {
+    "initial_capital": 1000,
+    "cash": 75,
+    "total_value": 1012.8,
+    "daily_pnl": 4.6,
+    "daily_return": 0.00456,
+    "cumulative_return": 0.0128,
+    "currency": "USD"
+  },
+  "positions": [
+    {"symbol": "SPY", "market": "US", "name": "S&P 500 ETF", "quantity": 0.5, "price": 672.4, "market_value": 336.2, "weight": 0.332, "target_weight": 0.30, "daily_pnl": 1.9, "signal": "SELL"},
+    {"symbol": "QQQ", "market": "US", "name": "Nasdaq 100 ETF", "quantity": 0.34, "price": 604.1, "market_value": 205.4, "weight": 0.203, "target_weight": 0.23, "daily_pnl": 1.7, "signal": "BUY"},
+    {"symbol": "GLD", "market": "US", "name": "Gold ETF", "quantity": 0.44, "price": 341.0, "market_value": 150.0, "weight": 0.148, "target_weight": 0.15, "daily_pnl": 0.8, "signal": "HOLD"},
+    {"symbol": "2800.HK", "market": "HK", "name": "Tracker Fund of Hong Kong", "quantity": 6.4, "price": 26.9, "market_value": 172.2, "weight": 0.17, "target_weight": 0.18, "daily_pnl": 0.7, "signal": "BUY"},
+    {"symbol": "CASH", "market": "US", "name": "USD Cash", "quantity": 75, "price": 1, "market_value": 75, "weight": 0.074, "target_weight": 0.07, "daily_pnl": 0, "signal": "HOLD"}
+  ],
+  "signals": [
+    {"symbol": "QQQ", "market": "US", "action": "BUY", "score": 0.72, "confidence": 0.81, "reason": "盈利修正与价格动量同步改善"},
+    {"symbol": "2800.HK", "market": "HK", "action": "BUY", "score": 0.58, "confidence": 0.74, "reason": "估值与市场宽度处于有利区间"},
+    {"symbol": "SPY", "market": "US", "action": "SELL", "score": -0.21, "confidence": 0.62, "reason": "降低集中度并释放再平衡资金"}
+  ],
+  "market_snapshot": [
+    {"symbol": "SPY", "market": "US", "name": "标普 500 ETF", "price": 672.4, "currency": "USD", "change_pct": 0.0064, "signal": "HOLD"},
+    {"symbol": "QQQ", "market": "US", "name": "纳指 100 ETF", "price": 604.1, "currency": "USD", "change_pct": 0.0112, "signal": "BUY"},
+    {"symbol": "0700.HK", "market": "HK", "name": "腾讯控股", "price": 651.0, "currency": "HKD", "change_pct": 0.0149, "signal": "BUY"},
+    {"symbol": "2800.HK", "market": "HK", "name": "盈富基金", "price": 26.9, "currency": "HKD", "change_pct": 0.0083, "signal": "BUY"}
+  ],
+  "equity_curve": [
+    {"date": "2026-09-12", "value": 1000, "benchmark": 1000},
+    {"date": "2026-09-15", "value": 1004.2, "benchmark": 1002.4},
+    {"date": "2026-09-16", "value": 1006.1, "benchmark": 1003.8},
+    {"date": "2026-09-17", "value": 1008.2, "benchmark": 1005.1},
+    {"date": "2026-09-18", "value": 1012.8, "benchmark": 1008.4}
+  ],
+  "metrics": {
+    "annual_return": 0.187,
+    "sharpe_ratio": 1.61,
+    "max_drawdown": -0.078,
+    "annual_volatility": 0.116,
+    "win_rate": 0.618,
+    "var_95": -0.0138,
+    "beta": 0.76
+  },
+  "report": {
+    "title": "美港市场动能维持正向",
+    "summary": "模型建议适度提高科技与港股宽基配置，同时降低美股大盘集中度。",
+    "body_markdown": "## 今日结论\n\nQQQ 与港股宽基的综合得分领先，组合保持轻度 Risk-on。"
+  },
+  "metadata": {"source": "local-quant", "universe_size": 500, "frequency": "1d"}
+}

@@ -1,0 +1,20 @@
+[Unit]
+Description=ATLAS Quant API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=liplin221
+Group=liplin221
+WorkingDirectory=/home/liplin221/paper-trading/backend
+EnvironmentFile=/home/liplin221/.config/paper-trading/backend.env
+ExecStart=/home/liplin221/paper-trading/backend/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000 --workers 1 --proxy-headers --forwarded-allow-ips=127.0.0.1
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=20
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
