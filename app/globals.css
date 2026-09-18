@@ -37,6 +37,15 @@ main { min-width:0; margin-left:224px; }
 .section-anchor { scroll-margin-top:62px; }
 .hero-row { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:30px; }
 .eyebrow { color:var(--lime); font-family:var(--font-geist-mono),monospace; font-size:9px; letter-spacing:.2em; text-transform:uppercase; }
+.glossary-hint { display:flex; align-items:center; gap:6px; margin-top:12px; color:#637074; font-size:9px; }
+.glossary-hint i,.term-help>sup,.term-corner { display:inline-grid; width:14px; height:14px; place-items:center; border:1px solid #526063; border-radius:50%; color:var(--cyan); font-family:var(--font-geist-mono),monospace; font-size:8px; font-style:normal; line-height:1; }
+.term-help { position:relative; display:inline-flex; align-items:center; gap:4px; cursor:help; outline:none; text-transform:none; }
+.term-help>sup { flex:0 0 14px; top:auto; vertical-align:middle; }
+.term-help:focus-visible>sup { border-color:var(--lime); box-shadow:0 0 0 2px rgba(184,243,93,.14); color:var(--lime); }
+.term-tooltip { position:absolute; bottom:calc(100% + 9px); left:0; z-index:220; width:min(280px,78vw); border:1px solid #465458; border-radius:4px; background:#151c1d; box-shadow:0 14px 45px rgba(0,0,0,.5); color:#aeb9b6; padding:11px 12px; font-family:var(--font-geist-sans),sans-serif; font-size:10px; font-weight:400; letter-spacing:0; line-height:1.55; opacity:0; pointer-events:none; text-align:left; text-transform:none; transform:translateY(4px); transition:opacity .14s ease,transform .14s ease; white-space:normal; }
+.term-tooltip::after { content:""; position:absolute; top:100%; left:13px; border:5px solid transparent; border-top-color:#465458; }
+.term-tooltip b { display:block; margin-bottom:4px; color:#edf3f0; font-size:10px; font-weight:650; }
+.term-help:hover .term-tooltip,.term-help:focus .term-tooltip,.term-help:focus-within .term-tooltip { opacity:1; transform:translateY(0); }
 h1,h2,h3,p { margin-top:0; }
 h1 { margin:8px 0; font-family:Georgia,"Times New Roman",serif; font-size:clamp(30px,3vw,48px); font-weight:400; letter-spacing:-.04em; }
 .hero-row p,.panel-intro,.market-title-row p,.portfolio-heading p { margin:0; color:var(--muted); font-size:12px; }
@@ -121,6 +130,7 @@ h1 { margin:8px 0; font-family:Georgia,"Times New Roman",serif; font-size:clamp(
 .backtest-config .panel-intro { margin:10px 0 24px; line-height:1.6; }
 .backtest-config label { display:block; color:#8b999c; margin:14px 0 0; font-size:9px; letter-spacing:.04em; }
 .backtest-config select { width:100%; appearance:none; border:1px solid var(--line); border-radius:3px; outline:none; background:#0c1112; color:#d8dfdc; margin-top:7px; padding:10px 30px 10px 11px; font-size:10px; }
+.field-help { display:block; margin-top:7px; color:#667478; font-size:8px; letter-spacing:0; line-height:1.55; }
 .field-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 .segmented { margin-top:7px; }
 .segmented button { flex:1; padding:9px; }
@@ -174,6 +184,7 @@ h1 { margin:8px 0; font-family:Georgia,"Times New Roman",serif; font-size:clamp(
 .report-card.lead { background:radial-gradient(circle at 95% 5%,rgba(184,243,93,.09),transparent 33%),var(--panel); }
 .report-card:hover { border-color:#485358; transform:translateY(-2px); }
 .report-type { color:var(--lime); font-family:var(--font-geist-mono),monospace; font-size:8px; letter-spacing:.08em; }
+.term-corner { display:inline-grid; width:13px; height:13px; margin-left:4px; border-color:rgba(184,243,93,.38); color:var(--lime); vertical-align:middle; }
 .report-card h3 { max-width:430px; margin:28px 0 10px; font-family:Georgia,serif; font-size:20px; font-weight:400; line-height:1.25; }
 .report-card p { color:var(--muted); font-size:10px; line-height:1.6; }
 .report-link { display:block; margin-top:20px; color:#d8dfdc; font-size:9px; }
@@ -202,7 +213,7 @@ footer p { margin:0; }
 @media (max-width:1100px) { .metric-grid{grid-template-columns:repeat(2,1fr)} .dashboard-grid,.two-col-section{grid-template-columns:1fr} .allocation-layout{grid-template-columns:1fr} .ticker-track span:nth-child(n+4){display:none} }
 @media (max-width:760px) {
   .sidebar{display:none} main{margin-left:0} .ticker-tape{padding:0 14px} .ticker-track{justify-content:flex-start;overflow:hidden} .ticker-track span:nth-child(n+3),.utc{display:none} .content{padding:28px 14px 88px}
-  .hero-row,.portfolio-heading,.market-title-row{align-items:flex-start;flex-direction:column}.hero-actions{width:100%}.hero-actions button{flex:1}.metric-grid{grid-template-columns:1fr 1fr}.metric-card{padding:16px}.metric-card>strong{font-size:22px}
+  .hero-row,.portfolio-heading,.market-title-row{align-items:flex-start;flex-direction:column}.hero-actions{width:100%}.hero-actions button{flex:1}.metric-grid{grid-template-columns:1fr 1fr}.metric-card{padding:16px}.metric-card>strong{font-size:22px}.term-tooltip{position:fixed;inset:auto 14px 86px;width:auto;max-width:none}.term-tooltip::after{display:none}
   .dashboard-grid{gap:10px}.performance-panel,.signal-panel,.backtest-config,.backtest-results,.market-panel,.portfolio-panel{padding:18px}.range-switch{display:none}.quote-head{display:none}.quote-row{grid-template-columns:1.35fr 1fr .7fr;gap:8px}.quote-row>.sparkline,.quote-row>.signal-tag{display:none}.market-tabs{overflow-x:auto}.market-tabs button{flex:0 0 auto}
   .backtest-metrics{grid-template-columns:repeat(2,1fr)}.allocation-head{display:none}.allocation-row{grid-template-columns:1.25fr .8fr .55fr}.allocation-row>strong{display:none}.report-grid{grid-template-columns:1fr}.report-card{min-height:175px}.section-heading{align-items:flex-start;gap:15px}footer{align-items:flex-start;flex-direction:column;gap:8px}
   .mobile-nav{position:fixed;inset:auto 10px 10px;z-index:80;display:grid;grid-template-columns:repeat(5,1fr);border:1px solid #354043;border-radius:8px;background:rgba(17,23,24,.96);box-shadow:0 16px 40px rgba(0,0,0,.42);padding:5px;backdrop-filter:blur(14px)}.mobile-nav button{display:flex;align-items:center;flex-direction:column;gap:3px;border:0;background:transparent;color:#768285;padding:7px 2px;font-size:8px}.mobile-nav button span{font-size:14px}.mobile-nav button.active{color:var(--lime)}.toast{right:14px;bottom:78px;left:14px;text-align:center}
